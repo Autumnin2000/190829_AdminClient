@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
-import {Form,Icon,Button,Input} from 'antd'
+import {Form,Icon,Button,Input,message} from 'antd'
+import {Redirect} from 'react-router-dom'
+import {reqLogin} from '../../api'
+import storageUtils from '../../utils/storageUtils'
 import logo from './images/logo.png'
 import './login.less'
+import memoryUtils from '../../utils/memoryUtils';
 
 
 
@@ -12,9 +16,22 @@ import './login.less'
 
 
     //对表单所有字段进行统一验证
-    this.props.form.validateFields((err,{username,password})=>{
+    this.props.form.validateFields(async (err,{username,password})=>{
       if(!err){
-        alert(`发登录的ajax请求,username=${username}`)
+      //  alert(`发登录的ajax请求,username=${username}`)
+       const result = await reqLogin(username,password)
+       //登录成功
+       if(result.status ===0){
+        //跳转到管理界面
+        const user =result.data
+        storageUtils.saveUser(user)
+        //保存在内存中
+        memoryUtils.user =user
+        this.props.history.replace('/')//用replace不要让他回来
+        message.success('登录成功！')
+       }else{
+         message.error(result.msg)
+       }
       }else{
         
       }
@@ -37,6 +54,11 @@ import './login.less'
 
   }
   render() {
+    //读取保存的user，如果存在，直接跳转到admin
+    const user =memoryUtils.user
+    if(user._id){
+      return <Redirect to="/" />
+    }
     const { getFieldDecorator} = this.props.form;
     return (
       
