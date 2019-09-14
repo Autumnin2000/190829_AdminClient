@@ -128,7 +128,9 @@ export default class Category extends Component {
      */
     const category = this.category || {}
     const extra = (
-      <Button type="primary" onClick={() =>{this.setState({showStatus :1})}}>
+      <Button type="primary" onClick={() =>{
+        this.category ={}//null也行，前面已经做了统一的处理了
+        this.setState({showStatus :1})}}>
         <Icon type="plus" />添加
       </Button>
     )

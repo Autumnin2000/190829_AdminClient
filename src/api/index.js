@@ -65,3 +65,57 @@ export const reqUpdateCategory = ({categoryId,categoryName}) =>ajax.post(BASE+'/
   categoryId,
   categoryName
 })
+/**
+ * 根据分类id获取分类
+ */
+
+ export const reqCategory =(categoryId) =>ajax(BASE+'/manage/category/info',{
+   params:{
+     categoryId
+   }
+ })
+/**
+ * 获取商品分类列表
+ */
+export const reqProducts = (pageNum,pageSize) =>ajax.get(BASE+'/manage/product/list',
+{params:{
+  pageNum,
+  pageSize
+  //包含所有query参数的对象
+}})
+/**
+ * 根据Name/desc搜索产品分页列表
+ */
+export const reqSearchProducts =({
+  pageNum,
+  pageSize,
+  searchName,
+  searchType //它的值是'productName'或'productDesc'
+}) => ajax(BASE+'/manage/product/search',{
+  //method:'GET',
+  params:{
+    pageNum,
+    pageSize,
+    [searchType]:searchName
+  }
+})
+/**
+ * 对商品进行上架下架处理
+ */
+export const reqUpdateStatus = (productId,status) =>ajax(BASE+'/manage/product/updateStatus',{
+  method:'POST',
+  data:{
+    productId,
+    status
+  }
+})
+/**
+ * 删除图片
+ */
+export const reqDeleteImg  =(name) =>ajax.post(BASE+'/manage/img/delete',{name})
+
+/**添加或者修改商品 */
+export const reqAddUpdateProduct = (product) =>ajax.post(
+  BASE+'/manage/product/'+(product._id ? 'update' :'add'),
+  product
+)
